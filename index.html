@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Sistema Multipropósito, Gestión Empresarial, Sucursales, Inventario, Movimientos Financieros">
+    <meta name="description" content="Sistema Multipropósito para gestionar sucursales, inventarios, productos, usuarios y movimientos financieros.">
+    <meta name="author" content="LYNXE">
+    <title>Sistema Multipropósito - Innovación en Gestión Empresarial</title>
+    <link rel="stylesheet" href="styles.css">
+   
+</head>
+<body>
+
+<!-- Encabezado con navegación -->
+<header>
+    <button onclick="window.location.href='index.html'">
+      <div class="logo">
+        <img src="../frontend/imagenes/logo-LYNXE.png" alt="Logo Lynxe" class="logo-img" />
+      </div>
+    </button>
+    <nav class="navbar">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul>
+        <li><a href="#inicio" onclick="loadSection('inicio')">Inicio</a></li>
+        <li><a href="#servicios" onclick="loadSection('servicios')">Servicios</a></li>
+        <li><a href="#tecnologias" onclick="loadSection('tecnologias')">Tecnologías</a></li>
+        <li><a href="#cta" onclick="loadSection('cta')">Empieza Ahora</a></li>
+        <li><a href="#contacto" onclick="loadSection('contacto')">Contacto</a></li>
+        <li><a href="login.html">Iniciar sesión</a></li>
+      </ul>
+    </nav>
+  </header>
+
+<!-- Contenido Principal -->
+<main class="main-content" id="content">
+    <!-- El contenido se cargará dinámicamente aquí -->
+</main>
+
+<!-- Pie de Página -->
+<footer>
+    <p>&copy; 2024 LYNXE - Todos los derechos reservados</p>
+</footer>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function toggleMenu() {
+            const navUl = document.querySelector(".navbar ul");
+            if (navUl) {
+                navUl.classList.toggle("active");
+            } else {
+                console.error("Elemento .navbar ul no encontrado.");
+            }
+        }
+
+        function closeMenu() {
+            const navUl = document.querySelector(".navbar ul");
+            if (navUl) {
+                navUl.classList.remove("active"); // Cierra el menú
+            }
+        }
+
+        // Evento para abrir/cerrar menú
+        document.querySelector(".menu-toggle").addEventListener("click", toggleMenu);
+
+        // Evento para cerrar menú al hacer clic en un enlace
+        document.querySelectorAll(".navbar ul li a").forEach(link => {
+            link.addEventListener("click", function () {
+                loadSection(this.getAttribute("href").substring(1)); // Cargar sección
+                closeMenu(); // Cerrar menú
+            });
+        });
+    });
+
+    // Cargar el contenido dinámicamente
+    function loadSection(section) {
+        const content = document.getElementById("content");
+
+        switch(section) {
+            case 'inicio':
+                content.innerHTML = `
+                    <section id="inicio" aria-labelledby="titulo-inicio">
+                        <h1 id="titulo-inicio">Bienvenido al Sistema Multipropósito</h1>
+                        <p>Transforma la gestión de tu empresa con nuestro sistema todo en uno. Gestiona inventarios, sucursales, usuarios y más, todo desde una sola plataforma.</p>
+                        <a href="#cta" class="btn-cta">¡Empieza Ahora!</a>
+                    </section>
+                `;
+                break;
+            case 'cta':
+                content.innerHTML = `
+                    <section id="cta" aria-labelledby="titulo-cta">
+                        <h2 id="titulo-cta">Gestiona tu Negocio Eficazmente</h2>
+                        <p>Registra sucursales, controla inventarios y gestiona productos de manera sencilla y segura. ¡Regístrate ahora!</p>
+                        <a href="registerSucursal.html" class="btn-cta">Registrar Sucursal</a>
+                    </section>
+                `;
+                break;
+            case 'servicios':
+                content.innerHTML = `
+                    <section id="servicios" aria-labelledby="titulo-servicios">
+                        <h2 id="titulo-servicios">Nuestros Servicios</h2>
+                        <div class="service-grid">
+                            <article>
+                                <h3>Gestión de Sucursales</h3>
+                                <p>Administra múltiples sucursales desde una sola plataforma.</p>
+                            </article>
+                            <article>
+                                <h3>Control de Inventarios</h3>
+                                <p>Seguimiento en tiempo real de productos y movimientos.</p>
+                            </article>
+                            <article>
+                                <h3>Movimientos Financieros</h3>
+                                <p>Gestiona ingresos, egresos y genera reportes automáticos.</p>
+                            </article>
+                        </div>
+                    </section>
+                `;
+                break;
+            case 'tecnologias':
+                content.innerHTML = `
+                    <section id="tecnologias" aria-labelledby="titulo-tecnologias">
+                        <h2 id="titulo-tecnologias">Tecnologías que Utilizamos</h2>
+                        <div class="tech-grid">
+                            <div class="tech-item">
+                                <img src="imagenes/react-logo.png" alt="React">
+                                <p>React</p>
+                            </div>
+                            <div class="tech-item">
+                                <img src="imagenes/angular-logo.png" alt="Angular">
+                                <p>Angular</p>
+                            </div>
+                            <div class="tech-item">
+                                <img src="imagenes/node-logo.png" alt="Node.js">
+                                <p>Node.js</p>
+                            </div>
+                        </div>
+                    </section>
+                `;
+                break;
+            case 'contacto':
+                content.innerHTML = `
+                    <section id="contacto" aria-labelledby="titulo-contacto">
+                        <h2 id="titulo-contacto">Contáctanos</h2>
+                        <p>Si tienes dudas o necesitas más información, contáctanos.</p>
+                        <div class="contact-icons">
+                            <a href="https://wa.me/1234567890" target="_blank" aria-label="WhatsApp">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>
+                            <a href="mailto:soporte@empresa.com" aria-label="Correo electrónico">
+                                <i class="bi bi-envelope"></i>
+                            </a>
+                        </div>
+                    </section>
+                `;
+                break;
+        }
+    }
+
+    // Cargar la sección por defecto al inicio
+    loadSection('inicio');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Movimientos Financieros</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>  
+    <script src="layout.js"></script>
+    
+    <div class="container">
+        <h1>Gestión de Movimientos Financieros</h1>
+        <form id="movimientoForm" class="form">
+            <input type="hidden" id="movimientoId">
+            <label>Descripción: <input type="text" id="descripcion" required></label>
+            <label>Monto: <input type="number" id="monto" required min="0" step="0.01"></label>
+            <label>Tipo: 
+                <select id="tipo">
+                    <option value="ingreso">Ingreso</option>
+                    <option value="egreso">Egreso</option>
+                </select>
+            </label>
+            <button type="submit">Guardar</button>
+        </form>
+
+        <h2>Movimientos Registrados</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="movimientosTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchMovimientos();
+            document.getElementById("movimientoForm").addEventListener("submit", saveMovimiento);
+        });
+
+        async function fetchMovimientos() {
+            try {
+                const response = await fetch("http://192.168.1.76:8000/movimientosfinancieros/");
+                if (!response.ok) throw new Error("Error al obtener los datos");
+                const movimientos = await response.json();
+                const tbody = document.getElementById("movimientosTable");
+                tbody.innerHTML = "";
+                movimientos.forEach(mov => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${mov.idMovimiento}</td>
+                        <td>${mov.descripcion}</td>
+                        <td>${parseFloat(mov.monto).toFixed(2)}</td>
+                        <td>${mov.tipo}</td>
+                        <td>
+                            <button onclick="editMovimiento(${mov.idMovimiento})">✏️</button>
+                            <button onclick="deleteMovimiento(${mov.idMovimiento})">🗑️</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function saveMovimiento(event) {
+            event.preventDefault();
+            const id = document.getElementById("movimientoId").value;
+            const descripcion = document.getElementById("descripcion").value.trim();
+            const monto = parseFloat(document.getElementById("monto").value);
+            const tipo = document.getElementById("tipo").value;
+
+            // Obtener el idSucursal desde el localStorage (o cualquier otro almacenamiento)
+            const idSucursal = localStorage.getItem("idSucursal");
+
+            if (!idSucursal) {
+                alert("No se ha encontrado el ID de la sucursal en la sesión.");
+                return;
+            }
+
+            if (!descripcion || isNaN(monto) || monto <= 0) {
+                alert("Por favor, ingrese una descripción válida y un monto positivo.");
+                return;
+            }
+
+            const movimiento = { idSucursal, descripcion, monto, tipo };
+            console.log("Datos enviados:", movimiento); // Verificar los datos antes de enviarlos
+
+            const method = id ? "PUT" : "POST";
+            const url = id ? `http://192.168.1.76:8000/movimientosfinancieros/${id}` : "http://192.168.1.76:8000/movimientosfinancieros/";
+
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(movimiento)
+                });
+                if (!response.ok) throw new Error("Error al guardar el movimiento");
+                document.getElementById("movimientoForm").reset();
+                document.getElementById("movimientoId").value = "";
+                fetchMovimientos();
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        async function editMovimiento(id) {
+            try {
+                const response = await fetch(`http://192.168.1.76:8000/movimientosfinancieros/${id}`);
+                if (!response.ok) throw new Error("Error al obtener el movimiento");
+                const mov = await response.json();
+                document.getElementById("movimientoId").value = mov.idMovimiento;
+                document.getElementById("descripcion").value = mov.descripcion;
+                document.getElementById("monto").value = parseFloat(mov.monto).toFixed(2);
+                document.getElementById("tipo").value = mov.tipo;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function deleteMovimiento(id) {
+            if (!confirm("¿Estás seguro de eliminar este movimiento?")) return;
+            try {
+                const response = await fetch(`http://192.168.1.76:8000/movimientosfinancieros/${id}`, { method: "DELETE" });
+                if (!response.ok) throw new Error("Error al eliminar el movimiento");
+                fetchMovimientos();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

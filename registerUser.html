@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Registro de Usuario</title>
+</head>
+
+<body>
+    
+    <form id="usuarioform">
+        <h1>Registro de Usuario</h1>
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
+
+        <label for="correoElectronico">Correo:</label>
+        <input type="email" id="correoElectronico" name="correoElectronico" placeholder="Ejemplo: usuario@sucursal.com" required>
+
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" placeholder="Ingresa tu contraseña" required>
+
+        <label for="confirmarContrasena">Confirmar Contraseña:</label>
+        <input type="password" id="confirmarContrasena" name="confirmarContrasena" placeholder="Repite tu contraseña" required>
+
+        <!-- El rol se establece como 'superadmin' por defecto y deshabilitado -->
+        <label for="rol">Rol:</label>
+        <select name="rol" id="rol" required>
+            <option value="superadmin">Superadmin</option>
+            <!-- Los demás roles se podrían ocultar para evitar que se elijan -->
+        </select>
+
+        <!-- El campo idSucursal se ha eliminado, ya no es necesario en el formulario -->
+        
+        <button type="submit">Registrar</button>
+        <button type="reset">Limpiar</button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const usuarioForm = document.getElementById("usuarioform");
+
+            // Establecer el valor del campo 'rol' a 'superadmin' por defecto y deshabilitarlo
+            const rolSelect = document.getElementById("rol");
+            rolSelect.value = "superadmin";  // Se asigna el valor de 'superadmin'
+            rolSelect.disabled = true;       // Se deshabilita el campo para que no se pueda cambiar
+
+            // Recuperamos el idSucursal desde localStorage
+            const idSucursal = localStorage.getItem("idSucursal");
+            console.log("idSucursal cargado desde localStorage: ", idSucursal);  // Log para verificar
+
+            // Asegurarnos de que idSucursal existe y asignarlo automáticamente al enviar el formulario
+            usuarioForm.addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                const rol = document.getElementById("rol").value;
+
+                // Verificar que el rol sea 'superadmin' (aunque ya está establecido como tal)
+                if (rol !== "superadmin") {
+                    alert("Solo un superadministrador puede registrar usuarios.");
+                    return;
+                }
+
+                const data = {
+                    nombre: document.getElementById("nombre").value,
+                    correoElectronico: document.getElementById("correoElectronico").value,
+                    contrasena: document.getElementById("contrasena").value,
+                    rol: rol
+                };
+
+                // Solo agregar idSucursal si el rol es 'superadmin'
+                if (rol === "superadmin") {
+                    if (!idSucursal) {
+                        alert("El superadministrador debe tener asignada una sucursal.");
+                        return;
+                    }
+                    data.idSucursal = idSucursal;  // Asignamos el idSucursal desde localStorage
+                }
+
+                // Enviar la solicitud
+                const response = await fetch("http://192.168.1.76:8000/usuarios/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+
+                    alert("Usuario registrado correctamente");
+                    usuarioForm.reset();
+                    window.location.href = "login.html"; // Asegúrate de que la ruta sea correcta
+
+                } else {
+                    const errorData = await response.json();
+                    console.error("Error en la respuesta:", errorData);
+                    alert("Error al registrar el usuario: " + JSON.stringify(errorData));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

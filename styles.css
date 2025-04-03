@@ -1,0 +1,1030 @@
+/* ============================= */
+/* Variables y Reset             */
+/* ============================= */
+:root {
+  --color-primario: #f4f809;
+  --color-secundario: #f7e73f;
+  --color-boton: #ffd503;
+  --color-texto: #010101;
+  --color-fondo: #ffffff;
+  --color-fondo-oscuro: #000000;
+  --color-toggle: #cbf708c6;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+}
+
+/* ============================= */
+/* Base y Tipografía             */
+/* ============================= */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'San Francisco', sans-serif;
+  line-height: 1.6;
+  color: var(--color-texto);
+  background: var(--color-fondo) no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  text-transform: capitalize;
+}
+
+p {
+  margin-bottom: 1.2rem;
+  color: var(--color-texto);
+}
+
+a {
+  color: var(--color-boton);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-secundario);
+  text-decoration: underline;
+  transform: scale(1.08);
+}
+
+/* ============================= */
+/* Encabezado / Navegación       */
+/* ============================= */
+header {
+  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  border-radius: 0 0 15px 15px;
+  flex-wrap: wrap;
+  position: relative; /* Para posicionar el toggle dentro del header */
+}
+
+.logo {
+  /* Ajusta el tamaño según lo que necesites */
+  max-width: 10px;
+  height: auto;
+}
+
+.logo-img {
+  max-width: 79px;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+}
+
+.navbar ul li a {
+  color: #040404;
+  margin-top: 10px;
+  font-weight: 700;
+  padding: 25px 15px;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+.navbar ul li a:hover {
+  background: rgba(7, 78, 242, 0.563);
+  color: #000e0e;
+}
+
+/* ============================= */
+/* Botón Toggle (visible en móviles) */
+/* ============================= */
+.menu-toggle {
+  display: none; /* Se mostrará en dispositivos móviles */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: #fff;
+  z-index: 10;
+  position: relative;
+  top: 15px;
+  right: 20px;
+}
+
+/* ============================= */
+/* Contenedor Principal (Main)   */
+/* ============================= */
+.main-content {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #81b6fc2e;
+  border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  text-align: center;
+}
+
+/* ============================= */
+/* Footer                        */
+/* ============================= */
+footer {
+  background: var(--color-fondo-oscuro);
+  color: #c5cae9;
+  text-align: center;
+  padding: 2.5rem;
+  margin-top: 50px;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+/* ============================= */
+/* Botones y Formularios         */
+/* ============================= */
+button,
+input[type="submit"] {
+  background: var(--color-boton);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease, transform 0.2s ease;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background: var(--color-secundario);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  transform: scale(1.05);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+  transition: box-shadow 0.3s ease-in-out; /* Transición aplicada correctamente */
+  gap: 1rem; /* Espaciado entre los elementos */
+}
+
+
+form:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+}
+
+label,
+input,
+textarea {
+  margin-bottom: 1.25rem;
+}
+
+input,
+textarea {
+  padding: 0.875rem;
+  border: 1px solid #d1d1d6;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+  transition: box-shadow 0.3s ease-in-out, border 0.3s ease-in-out;
+
+  /* Quita el borde azul por defecto en algunos navegadores */
+  outline: none;
+}
+
+input:hover,
+textarea:hover {
+  border-color: #a1a1a8;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
+}
+
+
+
+input:focus,
+textarea:focus {
+  border-color: var(--color-primario);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+}
+
+/* ============================= */
+/* Iconos de Contacto            */
+/* ============================= */
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.contact-icons a {
+  color: var(--color-primario);
+  text-decoration: none;
+  font-size: 1.25rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.contact-icons a:hover {
+  color: var(--color-secundario);
+  transform: scale(1.1);
+}
+
+/* ============================= */
+/* Botón de Retorno al Inicio    */
+/* ============================= */
+#back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+  font-size: 2rem;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+#back-to-top.show {
+  display: block;
+}
+
+/* ============================= */
+/* Estilos para el Dashboard     */
+/* ============================= */
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.dashboard .card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  font-size: 1.2rem;
+  text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  flex: 1 1 200px;
+  max-width: 300px;
+}
+
+.dashboard .card span {
+  font-weight: bold;
+  color: var(--color-texto);
+}
+
+/* ============================= */
+/* Gráficos (Chart.js)           */
+/* ============================= */
+section canvas {
+  margin: 2rem auto;
+  max-width: 600px;
+  display: block;
+}
+
+/* ============================= */
+/* Estilos para Actividad Reciente */
+/* ============================= */
+.movimientos-financieros {
+  margin: 2rem 0;
+}
+
+.movimientos-financieros h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.movimientos-financieros ul {
+  list-style: none;
+  padding: 0;
+  max-width: 600px;
+  margin: auto;
+}
+
+.movimientos-financieros ul li {
+  background-color: #ffffff;
+  border: 1px solid #4e648eb1;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+}
+
+/* ============================= */
+/* Estilos para el Panel de Sucursales */
+/* ============================= */
+#formulario-sucursal {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f4f4f4;
+  text-align: left;
+}
+
+#formulario-sucursal h2 {
+  margin-bottom: 1rem;
+  color: var(--color-fondo);
+}
+
+#formulario-sucursal label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+#formulario-sucursal input[type="text"],
+#formulario-sucursal input[type="email"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#listaSucursales {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+#listaSucursales li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  text-align: left;
+}
+
+#listaSucursales li strong {
+  color: var(--color-primario);
+  font-size: 1.2rem;
+}
+
+#listaSucursales li button {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+}
+
+/* ============================= */
+/* Estilos para Tablas           */
+/* ============================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: var(--color-primario);
+  color: #fff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+caption {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+/* ============================= */
+/* Media Query: Toggle para Menús */
+/* ============================= */
+@media (max-width: 768px) {
+  /* Mostrar el botón toggle en móviles */
+  .menu-toggle {
+    display: block;
+  }
+
+  /* Menú de navegación: oculto por defecto y en columna */
+  .navbar ul {
+    flex-direction: column;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-toggle);
+    padding: 3rem 0;
+    text-align: center;
+    display: none;
+    border: #000000;
+    border-radius: 2%;
+  }
+
+  .navbar ul.active {
+    display: flex;
+  }
+
+  .navbar ul li {
+    margin: 0.1rem 1%;
+  }
+
+  .navbar ul li a {
+    color: #000000;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+
+  .navbar ul li a:hover {
+    color: #d1e9ff;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ============================= */
+/* Responsividad Adicional       */
+/* ============================= */
+@media (max-width: 1024px) {
+  .main-content {
+    max-width: 1100px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+    text-align: center;
+  }
+
+  .dashboard .card {
+    flex: 1 1 45%;
+    max-width: 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    max-width: 95%;
+    padding: 1rem;
+  }
+
+  header {
+    flex-direction: flex;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  p, a, label, input, textarea, button {
+    font-size: 0.9rem;
+  }
+
+  .dashboard .card {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+}
+/* ============================= */
+/* Estilos para Panel de Sucursales */
+/* ============================= */
+main > section {
+  margin: 2rem auto;
+  max-width: 1100px;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+}
+
+#formulario-sucursal {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f4f4f4;
+  transition: all 0.3s ease;
+}
+
+#formulario-sucursal h2 {
+  margin-bottom: 1rem;
+  color: var(--color-primario);
+  text-align: center;
+}
+
+#formulario-sucursal label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+#formulario-sucursal input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+#formulario-sucursal input:focus {
+  border-color: var(--color-primario);
+  outline: none;
+}
+
+/* Lista de sucursales */
+#listaSucursales {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+#listaSucursales li {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  transition: background 0.3s ease;
+}
+
+#listaSucursales li:hover {
+  background: #f9f9f9;
+}
+
+#listaSucursales li strong {
+  color: var(--color-primario);
+  font-size: 1.1rem;
+}
+
+/* Botones de acciones dentro de las listas */
+.acciones {
+  margin-top: 1rem;
+}
+
+.acciones button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: var(--color-boton);
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.acciones button:hover {
+  background: var(--color-secundario);
+}
+
+/* ============================= */
+/* Estilos para Entradas y Salidas */
+/* ============================= */
+main > section form {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #fdfdfd;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+}
+
+main > section form h3 {
+  margin-bottom: 1rem;
+  color: var(--color-primario);
+  text-align: center;
+}
+
+main > section form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+main > section form input,
+main > section form select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+main > section form input:focus,
+main > section form select:focus {
+  border-color: var(--color-primario);
+  outline: none;
+}
+
+/* Listados de entradas y salidas */
+#entradas-list,
+#salidas-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+#entradas-list li,
+#salidas-list li {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  transition: background 0.3s ease;
+}
+
+#entradas-list li:hover,
+#salidas-list li:hover {
+  background: #f9f9f9;
+}
+
+#entradas-list li strong,
+#salidas-list li strong {
+  color: var(--color-primario);
+  font-size: 1.1rem;
+}
+
+/* ============================= */
+/* Media Queries para Entradas y Salidas */
+/* ============================= */
+@media (max-width: 768px) {
+  main > section {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  
+  #formulario-sucursal, 
+  main > section form {
+    padding: 1rem;
+  }
+  
+  #listaSucursales li,
+  #entradas-list li,
+  #salidas-list li {
+    font-size: 0.9rem;
+  }
+}
+/* ============================= */
+/* Container General             */
+/* ============================= */
+.container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+/* ============================= */
+/* Sección de Formulario         */
+/* ============================= */
+.form-section {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  margin-bottom: 2rem;
+}
+
+.form-section h2 {
+  text-align: center;
+  color: var(--color-primario);
+  margin-bottom: 1rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form input[type="text"],
+.form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form input[type="text"]:focus,
+.form textarea:focus {
+  border-color: var(--color-primario);
+  outline: none;
+}
+
+.form button {
+  align-self: center;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-boton);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.form button:hover {
+  background: var(--color-secundario);
+}
+
+/* ============================= */
+/* Sección de Lista de Categorías */
+/* ============================= */
+.list-section {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+}
+
+.list-section h2 {
+  text-align: center;
+  color: var(--color-primario);
+  margin-bottom: 1rem;
+}
+
+.category-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.category-list li {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-list li:last-child {
+  border-bottom: none;
+}
+
+.category-list li strong {
+  color: var(--color-primario);
+  font-size: 1.1rem;
+}
+
+.category-list li p {
+  color: var(--color-texto);
+  font-size: 0.95rem;
+}
+
+/* Botones de acción dentro de cada categoría */
+.category-list li .acciones {
+  margin-top: 0.5rem;
+}
+
+.category-list li .acciones button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-boton);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.category-list li .acciones button:hover {
+  background: var(--color-secundario);
+}
+
+/* ============================= */
+/* Media Queries                 */
+/* ============================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+  
+  .form-section, 
+  .list-section {
+    padding: 1rem;
+  }
+  
+  .category-list li {
+    font-size: 0.9rem;
+  }
+}
+/* ============================= */
+/* Contenedor y disposición      */
+/* ============================= */
+main {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+/* ============================= */
+/* Sección de Formulario         */
+/* ============================= */
+section:first-of-type {
+  background: #fcfcfb8c;
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+  margin-bottom: 2rem;
+}
+
+section:first-of-type h2 {
+  text-align: center;
+  color: var(--color-texto);
+  margin-bottom: 1rem;
+}
+
+#productoForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#productoForm select,
+#productoForm input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+#productoForm select:focus,
+#productoForm input:focus {
+  border-color: var(--color-primario);
+  outline: none;
+}
+
+#productoForm button {
+  align-self: center;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-boton);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#productoForm button:hover {
+  background: var(--color-secundario);
+}
+
+/* ============================= */
+/* Sección de Lista de Productos */
+/* ============================= */
+section:nth-of-type(2) {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+
+}
+
+section:nth-of-type(2) h2 {
+  text-align: center;
+  color: var(--color-primario);
+  margin-bottom: 1rem;
+}
+
+#listaProductos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#listaProductos li {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+#listaProductos li:last-child {
+  border-bottom: none;
+}
+
+#listaProductos li strong {
+  color: var(--color-primario);
+  font-size: 1.1rem;
+}
+
+#listaProductos li p {
+  color: var(--color-texto);
+  font-size: 0.95rem;
+}
+
+/* Botón para eliminar productos */
+#listaProductos li button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-boton);
+  color: #60bff3;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+#listaProductos li button:hover {
+  background: var(--color-secundario);
+}
+
+/* ============================= */
+/* Media Queries                 */
+/* ============================= */
+@media (max-width: 768px) {
+  main {
+    padding: 0.5rem;
+  }
+  
+  section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  #listaProductos li {
+    font-size: 0.9rem;
+  }
+}

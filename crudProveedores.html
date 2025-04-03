@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Proveedores</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   
+    <main>
+        <h2>Lista de Proveedores</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Contacto</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Dirección</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaProveedores"></tbody>
+        </table>
+        
+        <h2>Agregar/Editar Proveedor</h2>
+        <form id="proveedorForm">
+            <input type="hidden" id="idProveedor">
+            <label>Nombre: <input type="text" id="nombre" required></label>
+            <label>Contacto: <input type="text" id="contacto"></label>
+            <label>Teléfono: <input type="text" id="telefono"></label>
+            <label>Correo: <input type="email" id="correoElectronico"></label>
+            <label>Dirección: <input type="text" id="direccion"></label>
+            <button type="submit">Guardar</button>
+        </form>
+    </main>
+    <script src="layout.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            loadProveedores();
+            document.getElementById("proveedorForm").addEventListener("submit", saveProveedor);
+        });
+
+       
+
+        function loadProveedores() {
+            fetch('http://192.168.1.76:8000/proveedores/')
+                .then(response => response.json())
+                .then(proveedores => {
+                    let tbody = document.getElementById("tablaProveedores");
+                    tbody.innerHTML = "";
+                    proveedores.forEach(proveedor => {
+                        let tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${proveedor.idProveedor}</td>
+                            <td>${proveedor.nombre}</td>
+                            <td>${proveedor.contacto || '-'}</td>
+                            <td>${proveedor.telefono || '-'}</td>
+                            <td>${proveedor.correoElectronico || '-'}</td>
+                            <td>${proveedor.direccion || '-'}</td>
+                            <td>
+                                <button onclick="editProveedor(${proveedor.idProveedor})">Editar</button>
+                                <button onclick="deleteProveedor(${proveedor.idProveedor})">Eliminar</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => alert("Error al cargar proveedores: " + error));
+        }
+
+        function saveProveedor(event) {
+            event.preventDefault();
+            let id = document.getElementById("idProveedor").value;
+            let proveedor = {
+                nombre: document.getElementById("nombre").value,
+                contacto: document.getElementById("contacto").value,
+                telefono: document.getElementById("telefono").value,
+                correoElectronico: document.getElementById("correoElectronico").value,
+                direccion: document.getElementById("direccion").value
+            };
+            
+            let method = id ? "PUT" : "POST";
+            let url = id ? `http://192.168.1.76:8000/proveedores/${id}` : "http://192.168.1.76:8000/proveedores/";
+            fetch(url, {
+                method: method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(proveedor)
+            })
+            .then(response => response.json())
+            .then(() => {
+                loadProveedores();
+                document.getElementById("proveedorForm").reset();
+                document.getElementById("idProveedor").value = "";
+            })
+            .catch(error => alert("Error al guardar proveedor: " + error));
+        }
+
+        function editProveedor(id) {
+            fetch(`http://192.168.1.76:8000/proveedores/${id}`)
+                .then(response => response.json())
+                .then(proveedor => {
+                    document.getElementById("idProveedor").value = proveedor.idProveedor;
+                    document.getElementById("nombre").value = proveedor.nombre;
+                    document.getElementById("contacto").value = proveedor.contacto;
+                    document.getElementById("telefono").value = proveedor.telefono;
+                    document.getElementById("correoElectronico").value = proveedor.correoElectronico;
+                    document.getElementById("direccion").value = proveedor.direccion;
+                })
+                .catch(error => alert("Error al cargar proveedor: " + error));
+        }
+
+        function deleteProveedor(id) {
+            if (confirm("¿Seguro que deseas eliminar este proveedor?")) {
+                fetch(`http://192.168.1.76:8000/proveedores/${id}`, {
+                    method: "DELETE"
+                })
+                .then(() => loadProveedores())
+                .catch(error => alert("Error al eliminar proveedor: " + error));
+            }
+        }
+    </script>
+</body>
+</html>
