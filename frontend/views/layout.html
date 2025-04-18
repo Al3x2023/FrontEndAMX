@@ -1,0 +1,140 @@
+<header class="bg-primary shadow-sm sticky-top">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center py-3">
+      
+      <!-- Logo -->
+      <button onclick="window.location.href='superadminDashboard.html'" class="btn btn-link p-0 border-0 bg-transparent">
+        <img src="../imagenes/logo-LYNXE.png" alt="Logo Lynxe" class="logo-img" style="height: 50px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+      </button>
+
+      <!-- Menú Desktop (Todos los ítems visibles) -->
+      <nav class="d-none d-xl-block">
+        <ul class="nav nav-pills gap-2">
+          <!-- Grupo 1: Operaciones -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white hover-scale" href="#" data-bs-toggle="dropdown">
+              <i class="fas fa-warehouse me-1"></i> Operaciones
+            </a>
+            <ul class="dropdown-menu shadow">
+              <li><a class="dropdown-item" href="crudSucursales.html"><i class="fas fa-store me-2"></i>Sucursales</a></li>
+              <li><a class="dropdown-item" href="inventario.html"><i class="fas fa-boxes me-2"></i>Inventario</a></li>
+              <li><a class="dropdown-item" href="entradas.html"><i class="fas fa-sign-in-alt me-2"></i>Entradas</a></li>
+              <li><a class="dropdown-item" href="salidas.html"><i class="fas fa-sign-out-alt me-2"></i>Salidas</a></li>
+            </ul>
+          </li>
+          
+          <!-- Grupo 2: Catálogos -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white hover-scale" href="#" data-bs-toggle="dropdown">
+              <i class="fas fa-book me-1"></i> Catálogos
+            </a>
+            <ul class="dropdown-menu shadow">
+              <li><a class="dropdown-item" href="crudProductos.html"><i class="fas fa-tags me-2"></i>Productos</a></li>
+              <li><a class="dropdown-item" href="crudCategorias.html"><i class="fas fa-folder me-2"></i>Categorías</a></li>
+              <li><a class="dropdown-item" href="crudProveedores.html"><i class="fas fa-truck me-2"></i>Proveedores</a></li>
+            </ul>
+          </li>
+          
+          <!-- Grupo 3: Administración -->
+          <li class="nav-item">
+            <a class="nav-link text-white hover-scale" href="crudUsuarios.html">
+              <i class="fas fa-users-cog me-1"></i> Usuarios
+            </a>
+          </li>
+          
+          <!-- Grupo 4: Finanzas -->
+          <li class="nav-item">
+            <a class="nav-link text-white hover-scale" href="crudMovimientosFinancieros.html">
+              <i class="fas fa-chart-line me-1"></i> Finanzas
+            </a>
+          </li>
+          
+          <!-- Logout -->
+          <li class="nav-item">
+            <button class="nav-link text-white hover-scale bg-danger ms-2" onclick="logout()">
+              <i class="fas fa-power-off me-1"></i> Salir
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Botón Toggle Mobile -->
+      <button class="btn btn-primary d-xl-none fs-4" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú Mobile (Fullscreen) -->
+  <div id="mobileMenu" class="d-xl-none bg-dark" style="display: none; position: fixed; top: 80px; left: 0; right: 0; bottom: 0; z-index: 1000; overflow-y: auto;">
+    <div class="container py-4">
+      <div class="accordion" id="mobileAccordion">
+        
+        <!-- Grupo Operaciones -->
+        <div class="accordion-item border-0 bg-transparent">
+          <h2 class="accordion-header">
+            <button class="accordion-button bg-dark text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOperaciones">
+              <i class="fas fa-warehouse me-2"></i> Operaciones
+            </button>
+          </h2>
+          <div id="collapseOperaciones" class="accordion-collapse collapse" data-bs-parent="#mobileAccordion">
+            <div class="accordion-body p-0">
+              <a href="crudSucursales.html" class="d-block py-2 ps-5 text-white hover-bg-primary">
+                <i class="fas fa-store me-2"></i> Sucursales
+              </a>
+              <a href="inventario.html" class="d-block py-2 ps-5 text-white hover-bg-primary">
+                <i class="fas fa-boxes me-2"></i> Inventario
+              </a>
+              <a href="entradas.html" class="d-block py-2 ps-5 text-white hover-bg-primary">
+                <i class="fas fa-sign-in-alt me-2"></i> Entradas
+              </a>
+              <a href="salidas.html" class="d-block py-2 ps-5 text-white hover-bg-primary">
+                <i class="fas fa-sign-out-alt me-2"></i> Salidas
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Repetir estructura para otros grupos (Catálogos, etc.) -->
+        
+        <!-- Ítems sin agrupar -->
+        <a href="crudUsuarios.html" class="d-block py-3 text-white border-top border-secondary">
+          <i class="fas fa-users-cog me-2"></i> Usuarios
+        </a>
+        <a href="crudMovimientosFinancieros.html" class="d-block py-3 text-white border-top border-secondary">
+          <i class="fas fa-chart-line me-2"></i> Finanzas
+        </a>
+        <button onclick="logout()" class="d-block w-100 py-3 text-white text-start border-top border-secondary bg-transparent border-0">
+          <i class="fas fa-power-off me-2"></i> Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Footer (igual al anterior) -->
+
+<script>
+ 
+  
+  function logout() {
+    // Lógica de logout
+  }
+</script>
+
+<!-- CSS Adicional -->
+<style>
+  .hover-scale {
+    transition: transform 0.2s ease;
+  }
+  .hover-scale:hover {
+    transform: translateY(-3px);
+  }
+  .hover-bg-primary:hover {
+    background-color: rgba(78, 115, 223, 0.5) !important;
+  }
+  .nav-pills .nav-link.active {
+    background-color: var(--bs-white);
+    color: var(--bs-primary) !important;
+  }
+</style>

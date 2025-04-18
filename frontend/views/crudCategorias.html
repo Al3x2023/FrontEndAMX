@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Categorías</title>
+  <!-- Fuentes e iconos -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Framework CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Estilos personalizados -->
+  <style>
+    :root {
+      --primary: #4e73df;
+      --success: #1cc88a;
+      --danger: #e74a3b;
+      --warning: #f6c23e;
+      --dark: #5a5c69;
+      --light: #f8f9fc;
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f8f9fc;
+      padding-top: 2rem;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+      transition: transform 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card-header {
+      border-radius: 10px 10px 0 0 !important;
+      font-weight: 600;
+    }
+    
+    .form-section, .list-section {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+      margin-bottom: 2rem;
+    }
+    
+    h2 {
+      color: var(--dark);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-control, .form-select {
+      border-radius: 50px !important;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+    }
+    
+    textarea.form-control {
+      border-radius: 10px !important;
+      min-height: 100px;
+    }
+    
+    .btn {
+      border-radius: 50px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    .btn-warning {
+      background-color: var(--warning);
+      border-color: var(--warning);
+      color: #000;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger);
+      border-color: var(--danger);
+    }
+    
+    .category-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .category-list li {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.15rem 0.5rem rgba(58, 59, 69, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .category-list li:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0.5rem 1rem rgba(58, 59, 69, 0.15);
+    }
+    
+    .category-list li strong {
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+    
+    .category-list li p {
+      color: var(--dark);
+      margin: 0.5rem 0 1rem;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background-color: var(--success);
+    }
+    
+    .notification.error {
+      background-color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <i class="fas fa-tags me-2"></i>Agregar/Actualizar Categoría
+          </div>
+          <div class="card-body">
+            <form id="categoriaForm" class="form">
+              <input type="hidden" id="categoriaId">
+              <div class="mb-3">
+                <label for="categoria" class="form-label">Nombre de la categoría</label>
+                <input type="text" class="form-control" id="categoria" placeholder="Nombre de la categoría" required aria-label="Nombre de la categoría">
+              </div>
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea class="form-control" id="descripcion" placeholder="Descripción" aria-label="Descripción"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane me-2"></i>Guardar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div>
+              <i class="fas fa-list me-2"></i>Lista de Categorías
+            </div>
+            <button class="btn btn-sm btn-light" onclick="loadCategorias()">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <ul id="listaCategorias" class="category-list"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../scripts/Categorias.js"></script>
+  <script src="../scripts/layout.js"></script>
+</body>
+</html>

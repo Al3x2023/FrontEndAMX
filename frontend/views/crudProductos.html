@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Productos</title>
+  <!-- Fuentes e iconos -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4e73df;
+      --success: #1cc88a;
+      --info: #36b9cc;
+      --warning: #f6c23e;
+      --danger: #e74a3b;
+      --dark: #5a5c69;
+      --light: #f8f9fc;
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f8f9fc;
+      color: var(--dark);
+    }
+    
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 30px;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+      transition: transform 0.3s ease;
+      margin-bottom: 20px;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card-header {
+      background-color: var(--primary);
+      color: white;
+      border-radius: 10px 10px 0 0 !important;
+      padding: 15px 20px;
+      font-weight: 600;
+    }
+    
+    .section-title {
+      color: var(--dark);
+      margin-bottom: 20px;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 50px;
+      height: 3px;
+      background-color: var(--primary);
+    }
+    
+    .filter-section {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+      margin-bottom: 30px;
+    }
+    
+    .search-box {
+      position: relative;
+    }
+    
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 12px;
+      color: #d1d3e2;
+    }
+    
+    .search-input {
+      padding-left: 40px;
+      border-radius: 50px;
+      border: 1px solid #d1d3e2;
+      height: 45px;
+    }
+    
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+    
+    .form-control, .form-select {
+      border-radius: 50px;
+      height: 45px;
+      border: 1px solid #d1d3e2;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-weight: 600;
+    }
+    
+    .btn-primary:hover {
+      background-color: #2e59d9;
+    }
+    
+    .product-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .product-item {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .product-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .product-name {
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+    }
+    
+    .product-code {
+      color: var(--dark);
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+    
+    .product-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .product-detail {
+      font-size: 0.9rem;
+    }
+    
+    .product-detail i {
+      width: 20px;
+      color: var(--dark);
+      opacity: 0.7;
+    }
+    
+    .product-actions {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .form-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+    }
+    
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background-color: var(--success);
+    }
+    
+    .notification.error {
+      background-color: var(--danger);
+    }
+    
+    .badge {
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 50px;
+    }
+    
+    .badge-primary {
+      background-color: var(--primary);
+    }
+    
+    .badge-success {
+      background-color: var(--success);
+    }
+    
+    .badge-warning {
+      background-color: var(--warning);
+      color: #1f2d3d;
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 15px;
+      }
+      
+      .product-details {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="notification" id="notification"></div>
+  
+  <div class="dashboard-container">
+    <h1 class="section-title"><i class="fas fa-boxes me-2"></i>Gestión de Productos</h1>
+    
+   
+    
+    <!-- Lista de productos -->
+    <section>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="section-title"><i class="fas fa-list me-2"></i>Lista de Productos</h2>
+        <span class="badge bg-primary" id="contadorProductos">0 productos</span>
+      </div>
+       <!-- Sección de filtros -->
+    <section class="filter-section">
+      <h2 class="section-title"><i class="fas fa-filter me-2"></i>Filtrar Productos</h2>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" class="form-control search-input" id="buscarProducto" placeholder="Buscar por código o nombre">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <select class="form-select" id="filtrarCategoria">
+            <option value="">Todas las Categorías</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary w-100" id="btnFiltrar">
+            <i class="fas fa-filter me-2"></i>Filtrar
+          </button>
+        </div>
+      </div>
+    </section>
+
+      
+      
+      <ul class="product-list" id="listaProductos">
+        <li class="product-item">
+          <div class="text-center py-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando productos...</p>
+          </div>
+        </li>
+      </ul>
+          
+    <!-- Formulario para agregar producto -->
+    <section>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="section-title"><i class="fas fa-plus-circle me-2"></i>Agregar Producto</h2>
+        <button class="btn btn-sm btn-outline-secondary" id="btnToggleForm">
+          <i class="fas fa-chevron-down me-1"></i> Mostrar
+        </button>
+      </div>
+      
+      <div class="form-container" id="productoFormContainer" style="display: none;">
+        <form id="productoForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="idCategoria" class="form-label">Categoría</label>
+                <select class="form-select" id="idCategoria" required>
+                  <option value="">Seleccionar Categoría...</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="nombreDelProducto" class="form-label">Nombre del Producto</label>
+                <input type="text" class="form-control" id="nombreDelProducto" placeholder="Nombre del producto" required>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="codigoBarras" class="form-label">Código de Barras</label>
+                <input type="text" class="form-control" id="codigoBarras" placeholder="Código de barras">
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="codigoQR" class="form-label">Código QR</label>
+                <input type="text" class="form-control" id="codigoQR" placeholder="Código QR">
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="precioVenta" class="form-label">Precio de Venta</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="precioVenta" placeholder="0.00" step="0.01" min="0" required>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="presentacion" class="form-label">Presentación</label>
+                <select class="form-select" id="presentacion">
+                  <option value="">Seleccionar Presentación...</option>
+                  <option value="Caja">Caja</option>
+                  <option value="Bulto">Bulto</option>
+                  <option value="Botella">Botella</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="unidadDeMedida" class="form-label">Unidad de Medida</label>
+                <select class="form-select" id="unidadDeMedida">
+                  <option value="">Seleccionar Unidad...</option>
+                  <option value="kg">Kilogramo</option>
+                  <option value="l">Litros</option>
+                  <option value="m">Metros</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="col-12">
+              <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary me-2" onclick="document.getElementById('productoFormContainer').style.display = 'none'">
+                  <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-save me-2"></i>Guardar Producto
+                </button>
+              </div>
+    </section>
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="../scripts/Productos.js"></script>
+ <script src="../scripts/layout.js"></script>
+</body>
+</html>

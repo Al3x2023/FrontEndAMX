@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
             sucursalPadre: document.getElementById("sucursalPadre").value || null // Enviar null si está vacío
         };
 
-        const response = await fetch("http://127.0.0.1:8000/sucursales/", {
+        const response = await fetch("http://localhost:8000/sucursales/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

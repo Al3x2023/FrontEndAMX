@@ -1,9 +1,9 @@
 // layout.js
+
 function toggleMenu() {
-    const navUl = document.querySelector(".navbar ul");
-    navUl.classList.toggle("active");
-  }
-  
+  const mobileMenu = document.getElementById('mobileMenu');
+  mobileMenu.style.display = mobileMenu.style.display === 'none' ? 'block' : 'none';
+}
 document.addEventListener("DOMContentLoaded", async function () {
     try {
       const response = await fetch("layout.html");
@@ -26,6 +26,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   function logout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("idSucursal");
-    window.location.href = "../frontend/index.html"; // Redirigir desde la raíz
+    window.location.href = "./index.html"; // Redirigir desde la raíz
   }
   

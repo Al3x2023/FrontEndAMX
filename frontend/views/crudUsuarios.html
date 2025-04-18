@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Usuarios</title>
+    <!-- Fuentes e iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --dark: #5a5c69;
+            --light: #f8f9fc;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+            color: var(--dark);
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-action {
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            border: none;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            border: none;
+        }
+        
+        .section-title {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .form-container {
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .form-control {
+            border-radius: 50px;
+            height: 45px;
+            border: 1px solid #d1d3e2;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            background-color: var(--light);
+            border-top: none;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .table td, .table th {
+            vertical-align: middle;
+            padding: 12px 15px;
+        }
+        
+        .badge {
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 50px;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary);
+        }
+        
+        .badge-success {
+            background-color: var(--success);
+        }
+        
+        .badge-warning {
+            background-color: var(--warning);
+            color: #1f2d3d;
+        }
+        
+        .badge-danger {
+            background-color: var(--danger);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    
+    <div class="dashboard-container">
+        <!-- Botón para crear nuevo usuario -->
+        <button class="btn btn-success btn-action" onclick="mostrarFormularioCrearUsuario()">
+            <i class="fas fa-user-plus me-2"></i>Crear Usuario
+        </button>
+        
+        <!-- Formulario de usuario (oculto inicialmente) -->
+        <div class="form-container" id="formulario-usuario" style="display: none;">
+            <h3 class="section-title"><i class="fas fa-user-edit me-2"></i>Crear Nuevo Usuario</h3>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nombreUsuario" class="form-label">Nombre Completo</label>
+                    <input type="text" class="form-control" id="nombreUsuario" placeholder="Nombre del usuario" required>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="correoUsuario" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="correoUsuario" placeholder="correo@ejemplo.com" required>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="rolUsuario" class="form-label">Rol</label>
+                    <select class="form-select" id="rolUsuario" required>
+                        <option value="admin">Administrador</option>
+                        <option value="usuario">Usuario</option>
+                        <option value="cliente">Cliente</option>
+                        <option value="superadmin">Super Admin</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="contrasenaUsuario" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="contrasenaUsuario" placeholder="Contraseña segura" required minlength="6">
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('contrasenaUsuario')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Sucursal Asignada</label>
+                    <div class="form-control" id="sucursalAsignada" style="line-height: 45px;">
+                        <i class="fas fa-store me-2"></i>
+                        <span id="nombreSucursalActual">Cargando...</span>
+                    </div>
+                    <input type="hidden" id="idSucursalUsuario">
+                    <small class="text-muted">Se asignará automáticamente la sucursal actual</small>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-secondary me-2" onclick="document.getElementById('formulario-usuario').style.display = 'none'">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                <button class="btn btn-primary" onclick="crearUsuario()" id="btnCrearUsuario">
+                    <i class="fas fa-save me-2"></i>Crear Usuario
+                </button>
+            </div>
+        </div>
+        
+        <!-- Lista de usuarios -->
+        <section>
+            <h2 class="section-title"><i class="fas fa-users me-2"></i>Lista de Usuarios</h2>
+            <div class="table-responsive">
+                <table class="table table-hover" id="tablaUsuarios">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Rol</th>
+                            <th>Sucursal</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <p class="mt-2">Cargando usuarios...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal para editar usuario -->
+    <div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-user-edit me-2"></i>Editar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-editar-usuario">
+                        <input type="hidden" id="editarIdUsuario">
+                        <div class="mb-3">
+                            <label for="editarNombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editarNombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarCorreo" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="editarCorreo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarRol" class="form-label">Rol</label>
+                            <select class="form-select" id="editarRol" required>
+                                <option value="admin">Administrador</option>
+                                <option value="usuario">Usuario</option>
+                                <option value="cliente">Cliente</option>
+                                <option value="superadmin">Super Admin</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarEdicion" onclick="guardarEdicionUsuario()">
+                        <i class="fas fa-save me-2"></i>Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../scripts/Usuarios.js"></script>
+  <script src="../scripts/layout.js"></script>
+</body>
+</html>

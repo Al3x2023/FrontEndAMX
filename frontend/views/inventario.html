@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Inventario</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4e73df;
+      --success: #1cc88a;
+      --info: #36b9cc;
+      --warning: #f6c23e;
+      --danger: #e74a3b;
+      --dark: #5a5c69;
+      --light: #f8f9fc;
+    }
+    
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f8f9fc;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 30px;
+      background-color: rgba(255, 255, 255, 0.506);
+      border-radius: 15px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1rem 0 rgba(58, 59, 69, 0.1);
+      margin-bottom: 30px;
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card-header {
+      background-color: var(--primary);
+      color: white;
+      border-radius: 10px 10px 0 0 !important;
+      padding: 15px 20px;
+      font-weight: 600;
+    }
+    
+    .table-responsive {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .table {
+      margin-bottom: 0;
+    }
+    
+    .table th {
+      background-color: var(--light);
+      border-top: none;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    .table td, .table th {
+      vertical-align: middle;
+      padding: 12px 15px;
+    }
+    
+    .badge {
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 50px;
+    }
+    
+    .badge-success {
+      background-color: var(--success);
+    }
+    
+    .badge-warning {
+      background-color: var(--warning);
+      color: #1f2d3d;
+    }
+    
+    .badge-danger {
+      background-color: var(--danger);
+    }
+    
+    .search-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 12px;
+      color: #d1d3e2;
+    }
+    
+    .search-input {
+      padding-left: 40px;
+      border-radius: 50px;
+      border: 1px solid #d1d3e2;
+      height: 45px;
+    }
+    
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+    }
+    
+    .btn-primary:hover {
+      background-color: #2e59d9;
+    }
+    
+    .form-control {
+      border-radius: 50px;
+      height: 45px;
+      border: 1px solid #d1d3e2;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+    }
+    
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background-color: var(--success);
+    }
+    
+    .notification.error {
+      background-color: var(--danger);
+    }
+    
+    .stock-low {
+      color: var(--danger);
+      font-weight: bold;
+    }
+    
+    .stock-medium {
+      color: var(--warning);
+      font-weight: bold;
+    }
+    
+    .stock-high {
+      color: var(--success);
+      font-weight: bold;
+    }
+    
+    .action-buttons .btn {
+      padding: 5px 10px;
+      margin: 0 3px;
+      border-radius: 5px;
+    }
+    
+    .spinner-border {
+      display: none;
+      margin-left: 10px;
+    }
+    
+    .loading .spinner-border {
+      display: inline-block;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .card-header {
+        padding: 10px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="notification" id="notification"></div>
+  
+  <div class="container">
+    
+    <div class="row mb-4">
+      <div class="col">
+        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-boxes me-2"></i>Gestión de Inventario</h1>
+      </div>
+    </div>
+    
+    <div class="row">
+      <!-- Tarjeta de Resumen -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary h-100">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Productos en Inventario</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalProductos">0</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-box fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success h-100">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Stock Total</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalStock">0</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-cubes fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info h-100">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Productos Bajos</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800" id="productosBajos">0</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning h-100">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Sucursal Actual</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800" id="sucursalActual">1</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-store fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <div>
+                <i class="fas fa-clipboard-list me-2"></i>Inventario Actual
+              </div>
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control search-input" id="busquedaNombre" placeholder="Buscar producto...">
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover" id="tablaInventario">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Producto</th>
+                      <th>Stock</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer text-muted">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  Mostrando <span id="mostrando">0</span> de <span id="totalRegistros">0</span> productos
+                </div>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-primary" id="btnPrev" disabled><i class="fas fa-chevron-left"></i></button>
+                  <button class="btn btn-sm btn-outline-primary" id="btnNext" disabled><i class="fas fa-chevron-right"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-sync-alt me-2"></i>Actualizar Stock
+          </div>
+          <div class="card-body">
+            <form id="formActualizarStock">
+              <div class="mb-3">
+                <label for="idProducto" class="form-label">Producto</label>
+                <select class="form-select" id="idProducto" required>
+                  <option value="" selected disabled>Seleccione un producto</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="idSucursal" class="form-label">Sucursal</label>
+                <input type="number" class="form-control" id="idSucursal" value="1" required>
+              </div>
+              <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad</label>
+                <input type="number" class="form-control" id="cantidad" required>
+                <small class="text-muted">Use valores negativos para disminuir el stock</small>
+              </div>
+              <div class="mb-3">
+                <label for="motivo" class="form-label">Motivo</label>
+                <select class="form-select" id="motivo">
+                  <option value="reposicion">Reposición de inventario</option>
+                  <option value="venta">Venta</option>
+                  <option value="ajuste">Ajuste de inventario</option>
+                  <option value="devolucion">Devolución</option>
+                  <option value="otros">Otros</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary" id="btnActualizar">
+                Actualizar Stock
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-search me-2"></i>Consultar Inventario
+          </div>
+          <div class="card-body">
+            <form id="formConsultarInventario">
+              <div class="mb-3">
+                <label for="sucursalConsulta" class="form-label">Sucursal</label>
+                <input type="number" class="form-control" id="sucursalConsulta" value="1" required>
+              </div>
+              <button type="submit" class="btn btn-primary" id="btnConsultar">
+                Consultar Inventario
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+        
+        <div class="card mt-4">
+          <div class="card-header">
+            <i class="fas fa-chart-bar me-2"></i>Estadísticas Rápidas
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label">Filtrar por nivel de stock:</label>
+              <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary" onclick="filtrarPorStock('all')">Todos</button>
+                <button type="button" class="btn btn-outline-danger" onclick="filtrarPorStock('low')">Bajo</button>
+                <button type="button" class="btn btn-outline-warning" onclick="filtrarPorStock('medium')">Medio</button>
+                <button type="button" class="btn btn-outline-success" onclick="filtrarPorStock('high')">Alto</button>
+              </div>
+            </div>
+            <div class="progress mb-3" style="height: 20px;">
+              <div class="progress-bar bg-danger" role="progressbar" id="progressLow" style="width: 0%"></div>
+              <div class="progress-bar bg-warning" role="progressbar" id="progressMedium" style="width: 0%"></div>
+              <div class="progress-bar bg-success" role="progressbar" id="progressHigh" style="width: 0%"></div>
+            </div>
+            <div class="text-center">
+              <small class="text-muted"><span id="stockLowCount">0</span> bajos | <span id="stockMediumCount">0</span> medios | <span id="stockHighCount">0</span> altos</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+  </div>
+
+  <!-- Modal para edición rápida -->
+  <div class="modal fade" id="editarStockModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Stock</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditarStock">
+            <input type="hidden" id="modalIdProducto">
+            <input type="hidden" id="modalIdSucursal">
+            <div class="mb-3">
+              <label for="modalNombreProducto" class="form-label">Producto</label>
+              <input type="text" class="form-control" id="modalNombreProducto" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="modalStockActual" class="form-label">Stock Actual</label>
+              <input type="number" class="form-control" id="modalStockActual" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="modalNuevoStock" class="form-label">Nuevo Stock</label>
+              <input type="number" class="form-control" id="modalNuevoStock" required>
+            </div>
+            <div class="mb-3">
+              <label for="modalMotivo" class="form-label">Motivo</label>
+              <select class="form-select" id="modalMotivo">
+                <option value="reposicion">Reposición de inventario</option>
+                <option value="venta">Venta</option>
+                <option value="ajuste">Ajuste de inventario</option>
+                <option value="devolucion">Devolución</option>
+                <option value="otros">Otros</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnGuardarCambios">
+            Guardar Cambios
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../scripts/inventario.js"></script>
+  <script src="../scripts/layout.js"></script>
+</body>
+</html>

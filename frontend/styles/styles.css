@@ -2,15 +2,37 @@
 /* Variables y Reset             */
 /* ============================= */
 :root {
-  --color-primario: #f4f809;
-  --color-secundario: #f7e73f;
-  --color-boton: #ffd503;
-  --color-texto: #010101;
-  --color-fondo: #ffffff;
-  --color-fondo-oscuro: #000000;
-  --color-toggle: #cbf708c6;
-}
+  /* Colores principales */
+  --color-primary: #2d3033;
+  --color-secondary: #111111;
+  --color-dark: #033b7382;
+  --color-light: #ecf0f1;
+  --color-success: #2ecc71;
+  --color-danger: #e74c3c;
+  --color-warning: #f39c12;
+  --color-info: #ef7117;
 
+  /* Texto */
+  --color-text: #333;
+  --color-muted: #0e0e0e;
+
+  /* Tipografía */
+  --font-primary: 'Segoe UI', sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-weight-normal: 400;
+  --font-weight-bold: 600;
+
+  /* Espaciado */
+  --spacing-sm: 0.5rem;
+  --spacing: 1rem;
+  --spacing-lg: 2rem;
+
+  /* Bordes y sombras */
+  --border-radius: 0.5rem;
+  --box-shadow: 0 4px 6px rgba(49, 48, 48, 0.08);
+}
 *,
 *::before,
 *::after {
@@ -27,27 +49,38 @@ html {
 /* ============================= */
 /* Base y Tipografía             */
 /* ============================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'San Francisco', sans-serif;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
   line-height: 1.6;
   color: var(--color-texto);
-  background: var(--color-fondo) no-repeat center center fixed;
+  background: url('../imagenes/AMX.png') no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
+  line-height: 1.6;
+}
+
+.text-muted {
+  color: var(--color-muted);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 1.2rem;
-  font-weight: 700;
-  color: var(--color-texto);
-  text-transform: capitalize;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
+  margin-bottom: var(--spacing-sm);
 }
 
 p {
-  margin-bottom: 1.2rem;
-  color: var(--color-texto);
+  margin-bottom: var(--spacing-sm);
 }
-
 a {
   color: var(--color-boton);
   text-decoration: none;
@@ -60,17 +93,44 @@ a:hover {
   text-decoration: underline;
   transform: scale(1.08);
 }
-
+.btn {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: var(--color-primary);
+  color: white;
+  box-shadow: var(--box-shadow);
+}
+.btn:hover {
+  background-color: #1c86ee;
+}
+.btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.btn:focus-visible {
+  outline: 2px dashed var(--color-primary);
+  outline-offset: 2px;
+}
+.btn-success { background-color: var(--color-success); }
+.btn-danger { background-color: var(--color-danger); }
+.btn-warning { background-color: var(--color-warning); }
+.btn-info { background-color: var(--color-info); }
 /* ============================= */
 /* Encabezado / Navegación       */
 /* ============================= */
 header {
-  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+  background: linear-gradient(135deg, var(--color-dark), var(--color-muted));
   padding: 1.5rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.916);
 
   border-radius: 0 0 15px 15px;
   flex-wrap: wrap;
@@ -94,7 +154,7 @@ header {
 }
 
 .navbar ul li a {
-  color: #040404;
+  color: #00e5ffa2;
   margin-top: 10px;
   font-weight: 700;
   padding: 25px 15px;
@@ -116,7 +176,7 @@ header {
   border: none;
   cursor: pointer;
   font-size: 1.8rem;
-  color: #fff;
+  color: #269cc3e5;
   z-index: 10;
   position: relative;
   top: 15px;
@@ -156,7 +216,7 @@ footer {
 button,
 input[type="submit"] {
   background: var(--color-boton);
-  color: #fff;
+  color: #fcfcfcfe;
   border: none;
   padding: 14px 28px;
   border-radius: 10px;
@@ -168,7 +228,7 @@ input[type="submit"] {
 
 button:hover,
 input[type="submit"]:hover {
-  background: var(--color-secundario);
+  background: var(--color-dark);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.637);
 
   transform: scale(1.05);
@@ -223,8 +283,6 @@ textarea:focus {
   border-color: #007bff;
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
 }
-
-
 
 input:focus,
 textarea:focus {
@@ -410,20 +468,23 @@ section canvas {
 /* ============================= */
 table {
   width: 100%;
+  margin-top: var(--spacing);
   border-collapse: collapse;
   margin-bottom: 1rem;
+  box-shadow: var(--box-shadow);
 }
 
 th,
 td {
-  padding: 0.75rem;
+  padding: var(--spacing-sm);
   border: 1px solid #ddd;
   text-align: left;
 }
 
 th {
-  background-color: var(--color-primario);
-  color: #fff;
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  font-weight: var(--font-weight-bold);
 }
 
 tbody tr:nth-child(even) {
@@ -506,8 +567,11 @@ caption {
   }
 
   .dashboard .card {
-    flex: 1 1 45%;
-    max-width: 45%;
+    background-color: white;
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  box-shadow: var(--box-shadow);
+  margin-bottom: var(--spacing);
   }
 }
 
@@ -533,14 +597,45 @@ caption {
   }
 
   p, a, label, input, textarea, button {
-    font-size: 0.9rem;
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px solid #ffffff00;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-base);
+    font-family: var(--font-primary);
+    background-color: rgba(77, 135, 177, 0.595);
+    box-shadow: inset 0 1px 3px rgb(0, 0, 0);  }
+  button.cancel {
+    background-color: transparent;
+    color: #475569;
+    border: 1px solid #cbd5e1;
   }
-
+  
+  button.cancel:hover {
+    background-color: #f1f5f9;
+  }
   .dashboard .card {
     font-size: 1rem;
     padding: 1rem;
   }
+  .card h3 {
+    margin-bottom: var(--spacing-sm);
+  }
 }
+.text-center { text-align: center; }
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing); }
+.mt-3 { margin-top: var(--spacing-lg); }
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+
+.p-1 { padding: var(--spacing-sm); }
+.p-2 { padding: var(--spacing); }
+.p-3 { padding: var(--spacing-lg); }
+
+
 /* ============================= */
 /* Estilos para Panel de Sucursales */
 /* ============================= */
@@ -586,8 +681,9 @@ main > section {
 }
 
 #formulario-sucursal input:focus {
-  border-color: var(--color-primario);
   outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.2);
 }
 
 /* Lista de sucursales */
@@ -714,6 +810,9 @@ main > section form select:focus {
 /* Media Queries para Entradas y Salidas */
 /* ============================= */
 @media (max-width: 768px) {
+  .container {
+    padding-inline: var(--spacing-sm);
+  }
   main > section {
     margin: 1rem;
     padding: 1rem;
@@ -734,9 +833,11 @@ main > section form select:focus {
 /* Container General             */
 /* ============================= */
 .container {
-  max-width: 1100px;
-  margin: 2rem auto;
-  padding: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--spacing);
+  padding-block: var(--spacing-lg);
 }
 
 /* ============================= */

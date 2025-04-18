@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Proveedores</title>
+  <!-- Fuentes e iconos -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Framework CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Estilos personalizados -->
+  <style>
+    :root {
+      --primary: #4e73df;
+      --success: #1cc88a;
+      --danger: #e74a3b;
+      --warning: #f6c23e;
+      --dark: #5a5c69;
+      --light: #f8f9fc;
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f8f9fc;
+      padding: 20px;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1rem rgba(58, 59, 69, 0.1);
+      transition: transform 0.3s ease;
+      margin-bottom: 20px;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .table-responsive {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .table {
+      margin-bottom: 0;
+    }
+    
+    .table thead {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .table-hover tbody tr:hover {
+      background-color: rgba(78, 115, 223, 0.1);
+    }
+    
+    .btn {
+      border-radius: 50px;
+      padding: 8px 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .form-control {
+      border-radius: 50px;
+      padding: 10px 15px;
+    }
+    
+    .form-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: block;
+    }
+    
+    .action-btn {
+      padding: 5px 10px;
+      margin: 0 3px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .action-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .edit-btn {
+      background-color: var(--warning);
+      color: white;
+    }
+    
+    .delete-btn {
+      background-color: var(--danger);
+      color: white;
+    }
+    
+    h2 {
+      color: var(--dark);
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* Animaciones y notificaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      animation: fadeIn 0.3s ease-out;
+      display: flex;
+      align-items: center;
+    }
+    
+    .notification.success {
+      background-color: var(--success);
+    }
+    
+    .notification.error {
+      background-color: var(--danger);
+    }
+    
+    .notification i {
+      margin-right: 10px;
+    }
+    
+    /* Spinner de carga */
+    .spinner-container {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Buscador */
+    .search-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .search-container i {
+      position: absolute;
+      left: 15px;
+      top: 12px;
+      color: var(--dark);
+    }
+    
+    .search-input {
+      padding-left: 40px;
+      border-radius: 50px;
+    }
+    
+    /* Efecto de carga en filas */
+    .skeleton-row td {
+      padding: 12px;
+    }
+    
+    .skeleton-cell {
+      height: 20px;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="card">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <div>
+          <i class="fas fa-truck me-2"></i>Lista de Proveedores
+        </div>
+        <div class="search-container">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" class="form-control search-input" placeholder="Buscar proveedores..." style="width: 250px;">
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Contacto</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaProveedores">
+              <!-- Los datos se insertarán dinámicamente aquí -->
+            </tbody>
+          </table>
+        </div>
+        <div id="loadingSpinner" class="spinner-container" style="display: none;">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <i class="fas fa-edit me-2"></i>Agregar/Editar Proveedor
+      </div>
+      <div class="card-body">
+        <form id="proveedorForm" class="row g-3">
+          <input type="hidden" id="idProveedor">
+          
+          <div class="col-md-6">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" required>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="contacto" class="form-label">Contacto</label>
+            <input type="text" class="form-control" id="contacto">
+          </div>
+          
+          <div class="col-md-4">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="telefono">
+          </div>
+          
+          <div class="col-md-4">
+            <label for="correoElectronico" class="form-label">Correo</label>
+            <input type="email" class="form-control" id="correoElectronico">
+          </div>
+          
+          <div class="col-md-4">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="direccion">
+          </div>
+          
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              <i class="fas fa-save me-2"></i>Guardar
+            </button>
+            <button type="button" class="btn btn-outline-secondary ms-2" id="cancelBtn" style="display: none;">
+              <i class="fas fa-times me-2"></i>Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../scripts/Proveedores.js">  </script>
+  <script src="../scripts/layout.js"></script>
+</body>
+</html>
