@@ -42,8 +42,8 @@
     
     /* Encabezado */
     header {
-      background-color: white;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      background-color: rgba(255, 221, 3, 0.612);
+      box-shadow: 0 2px 10px rgba(15, 15, 15, 0.895);
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -54,18 +54,42 @@
     }
     
     .logo {
-      height: 50px;
-      transition: transform 0.3s ease;
+    height: 80px;
+    transition: all 0.5s ease-out;
+    transform-origin: center;
+    /* Evita que el movimiento se "salga" de un contenedor */
+    display: inline-block;
+    overflow: visible;
+}
+.logo-btn{
+        background-color: #ffffff87;
+        border-radius: 10%;
+        border-color: #e9ecef02;
     }
-    
-    .logo:hover {
-      transform: scale(1.05);
-    }
-    
-    .logo-img {
-      height: 100%;
-      object-fit: contain;
-    }
+/* Animación automática cada 5 segundos */
+@keyframes subtleFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.02); }
+}
+
+.logo:hover {
+    animation: none; /* Detiene la animación al hacer hover */
+    transform: scale(1.05);
+    filter: drop-shadow(0 3px 8px rgb(0, 0, 0));
+}
+
+/* Aplica la animación solo cuando no hay interacción */
+.logo:not(:hover) {
+    animation: subtleFloat 0.8s ease-in-out infinite;
+}
+
+.logo-img {
+    height: 100%;
+    object-fit: contain;
+    /* Elimina bordes si el logo tiene fondo */
+    border: none;
+    outline: none;
+}
     
     /* Navegación */
     .navbar ul {
@@ -318,7 +342,6 @@
       font-size: 0.9rem;
       margin-bottom: 15px;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
